@@ -6,3 +6,5 @@ Description: dtutils provides convenience functions for the R package data.table
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    data.table
