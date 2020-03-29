@@ -8,3 +8,4 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     data.table
+RoxygenNote: 7.1.0
