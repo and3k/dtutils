@@ -2,23 +2,25 @@
 % Please edit documentation in R/write_tsv.R
 \name{write_tsv}
 \alias{write_tsv}
+\alias{fwrite_tsv}
 \alias{write_tsv.data.table}
 \title{TSV writer}
 \usage{
 write_tsv(x, file, ...)
 }
 \arguments{
-\item{x}{An R object.}
+\item{x}{An \R object (e.g., a \code{\link{data.table}}).}
 
 \item{file}{Output file name. File extensions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a warning.}
 
-\item{...}{Additional arguments to be passed to methods.}
+\item{...}{Additional arguments to be passed to methods (e.g., to \code{\link{fwrite}}).}
 }
 \description{
-As fwrite, but defaults to TSV instead of CSV.
+As \code{\link{fwrite}}, but tab-separated (TSV) instead of the default comma-separated (CSV).
 }
 \examples{
 library(data.table)
-Mtcars <- as.data.table(mtcars, keep.rownames = TRUE)
-write_tsv(Mtcars, "mtcars.tsv")
+library(dtutils)
+mtcars_dt <- as.data.table(mtcars, keep.rownames = TRUE)
+write_tsv(mtcars_dt, "mtcars.tsv")
 }
