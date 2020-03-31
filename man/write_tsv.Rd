@@ -10,7 +10,7 @@ write_tsv(x, file, ...)
 \arguments{
 \item{x}{An R object.}
 
-\item{file}{Output file name.}
+\item{file}{Output file name. File extenions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a warning.}
 
 \item{...}{Additional arguments to be passed to methods.}
 }
