@@ -1,6 +1,6 @@
 Package: dtutils
 Title: Convenience Functions for the R Package data.table
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("Bela", "Hausmann", email = "belahausmann@fsfe.org", role = c("aut", "cre"), comment = c(ORCID = "https://orcid.org/0000-0002-0846-1202"))
 Description: dtutils provides convenience functions for the R package data.table.
 License: MIT + file LICENSE
