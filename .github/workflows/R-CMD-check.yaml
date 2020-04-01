@@ -10,7 +10,6 @@ jobs:
   # see https://github.com/r-lib/actions/tree/master/examples
   R-CMD-check:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - uses: r-lib/actions/setup-r@master
@@ -20,6 +19,5 @@ jobs:
         remotes::install_deps(dependencies = TRUE)
       shell: Rscript {0}
     - name: Check
-      run: rcmdcheck::rcmdcheck(error_on = "note")
+      run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "note")
       shell: Rscript {0}
- 
