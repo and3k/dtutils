@@ -1,26 +1,18 @@
 name: R-CMD-check
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "R-CMD-check"
+  # see https://github.com/r-lib/actions/tree/master/examples
   R-CMD-check:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-
-    # from https://github.com/r-lib/actions/tree/master/examples
     - uses: r-lib/actions/setup-r@master
     - name: Install dependencies
       run: |
@@ -28,5 +20,6 @@ jobs:
         remotes::install_deps(dependencies = TRUE)
       shell: Rscript {0}
     - name: Check
-      run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
+      run: rcmdcheck::rcmdcheck(error_on = "note")
       shell: Rscript {0}
+ 
