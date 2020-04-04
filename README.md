@@ -8,6 +8,7 @@
 [![GitHub](https://img.shields.io/github/license/and3k/dtutils)](https://github.com/and3k/dtutils/blob/master/LICENSE)
 
 [![R CMD check](https://github.com/and3k/dtutils/workflows/R%20CMD%20check/badge.svg)](https://github.com/and3k/dtutils/actions?query=workflow%3A%22R+CMD+check%22)
+[![codecov](https://codecov.io/gh/and3k/dtutils/branch/master/graph/badge.svg)](https://codecov.io/gh/and3k/dtutils)
 [![GitHub issues](https://img.shields.io/github/issues/and3k/dtutils)](https://github.com/and3k/dtutils/issues)
 <!-- badges: end -->
 
