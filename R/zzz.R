@@ -1,4 +1,4 @@
-.onAttach <- function(libname, pkgname) {
+.onAttach <- function(libname, pkgname) { # nolint
   if (interactive()) {
     if (!identical(getOption("datatable.na.strings"), "")) {
       packageStartupMessage(

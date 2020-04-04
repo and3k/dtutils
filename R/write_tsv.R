@@ -27,7 +27,7 @@ write_tsv <- function(x, file, ...) {
 }
 
 #' @export
-write_tsv.data.table <- function(x, file, sep = "\t", ...) {
+write_tsv.data.table <- function(x, file, sep = "\t", ...) { # nolint
   if (!identical(sep, "\t")) {
     stop("The separator in TSV files needs to be \u2018\\t\u2019.")
   }
