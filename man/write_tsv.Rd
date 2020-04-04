@@ -11,12 +11,15 @@ write_tsv(x, file, ...)
 \arguments{
 \item{x}{An \R object (e.g., a \code{\link{data.table}}).}
 
-\item{file}{Output file name. File extensions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a warning.}
+\item{file}{Output file name. File extensions other than \code{.tsv}, \code{.tab},
+and \code{.txt} result in a warning.}
 
-\item{...}{Additional arguments to be passed to methods (e.g., to \code{\link{fwrite}}).}
+\item{...}{Additional arguments to be passed to methods
+(e.g., to \code{\link{fwrite}}).}
 }
 \description{
-As \code{\link{fwrite}}, but tab-separated (TSV) instead of the default comma-separated (CSV).
+As \code{\link{fwrite}}, but tab-separated (TSV) instead of the default
+comma-separated (CSV).
 }
 \examples{
 library(data.table)
