@@ -8,6 +8,13 @@
 \description{
 dtutils provides convenience functions for the R package data.table.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/and3k/dtutils}
+}
+
+}
 \author{
 \strong{Maintainer}: Bela Hausmann \email{belahausmann@fsfe.org} (\href{https://orcid.org/0000-0002-0846-1202}{ORCID})
 
