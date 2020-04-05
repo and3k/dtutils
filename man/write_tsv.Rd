@@ -31,7 +31,7 @@ Writes an \R object to a tab-separated values (TSV) file.
 
 \examples{
 library(data.table)
-library(dtutils)
 mtcars_dt <- as.data.table(mtcars, keep.rownames = TRUE)
+library(dtutils)
 write_tsv(mtcars_dt, "mtcars.tsv")
 }

@@ -10,8 +10,8 @@
 #' @param ... Additional arguments to be passed to methods.
 #' @examples
 #' library(data.table)
-#' library(dtutils)
 #' mtcars_dt <- as.data.table(mtcars, keep.rownames = TRUE)
+#' library(dtutils)
 #' write_tsv(mtcars_dt, "mtcars.tsv")
 #' @export
 write_tsv <- function(object, file, sep = "\t", ...) {
@@ -31,5 +31,5 @@ write_tsv.data.table <- function(object, file, sep = "\t", ...) { # nolint
   if (!identical(sep, "\t")) {
     stop("The separator in TSV files needs to be \u2018\\t\u2019.")
   }
-  data.table::fwrite(x = object, file = file, sep = sep, ...)
+  fwrite(x = object, file = file, sep = sep, ...)
 }

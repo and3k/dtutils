@@ -10,7 +10,8 @@ Authors@R:
     comment = c(ORCID = "https://orcid.org/0000-0002-0846-1202")
   )
 Imports:
-    data.table,
+    data.table (>= 1.9.8),
+    magrittr,
     stringr
 Suggests:
     testthat (>= 2.1.0),
