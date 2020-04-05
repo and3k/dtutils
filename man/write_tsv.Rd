@@ -2,25 +2,33 @@
 % Please edit documentation in R/write_tsv.R
 \name{write_tsv}
 \alias{write_tsv}
-\alias{fwrite_tsv}
 \alias{write_tsv.data.table}
+\alias{fwrite_tsv}
 \title{TSV writer}
 \usage{
-write_tsv(x, file, ...)
+write_tsv(x, file, sep = "\\t", ...)
+
+\method{write_tsv}{data.table}(x, file, sep = "\\t", ...)
 }
 \arguments{
-\item{x}{An \R object (e.g., a \code{\link{data.table}}).}
+\item{x}{An \R object to save as TSV.}
 
-\item{file}{Output file name. File extensions other than \code{.tsv}, \code{.tab},
-and \code{.txt} result in a warning.}
+\item{file}{Output file name.
+File extensions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a warning.}
 
-\item{...}{Additional arguments to be passed to methods
-(e.g., to \code{\link{fwrite}}).}
+\item{sep}{Defaults to \code{"\\t"}. Cannot be changed.
+Included for comptability with base methods and underlying methods.}
+
+\item{...}{Additional arguments to be passed to methods.}
 }
 \description{
-As \code{\link{fwrite}}, but tab-separated (TSV) instead of the default
-comma-separated (CSV).
+Writes an \R object to a tab-separated (TSV) file.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{data.table}: Writes a \link{data.table} using \code{\link[data.table:fwrite]{data.table::fwrite()}}.
+}}
+
 \examples{
 library(data.table)
 library(dtutils)

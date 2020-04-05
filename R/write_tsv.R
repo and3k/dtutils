@@ -1,22 +1,20 @@
 #' TSV writer
 #'
-#' As [`fwrite`], but tab-separated (TSV) instead of the default
-#' comma-separated (CSV).
+#' Writes an \R object to a tab-separated (TSV) file.
 #'
-#' @export
-#' @aliases fwrite_tsv
-#' @aliases write_tsv.data.table
-#' @param x An \R object (e.g., a [`data.table`]).
-#' @param file Output file name. File extensions other than `.tsv`, `.tab`,
-#'             and `.txt` result in a warning.
-#' @param ... Additional arguments to be passed to methods
-#'            (e.g., to [`fwrite`]).
+#' @param x An \R object to save as TSV.
+#' @param file Output file name.
+#'   File extensions other than `.tsv`, `.tab`, and `.txt` result in a warning.
+#' @param sep Defaults to `"\t"`. Cannot be changed.
+#'   Included for comptability with base methods and underlying methods.
+#' @param ... Additional arguments to be passed to methods.
 #' @examples
 #' library(data.table)
 #' library(dtutils)
 #' mtcars_dt <- as.data.table(mtcars, keep.rownames = TRUE)
 #' write_tsv(mtcars_dt, "mtcars.tsv")
-write_tsv <- function(x, file, ...) {
+#' @export
+write_tsv <- function(x, file, sep = "\t", ...) {
   if (!all(stringr::str_detect(
     file,
     stringr::regex("\\.(tsv|tab|txt)$", ignore_case = TRUE)
@@ -26,6 +24,8 @@ write_tsv <- function(x, file, ...) {
   UseMethod("write_tsv")
 }
 
+#' @describeIn write_tsv Writes a [data.table] using [data.table::fwrite()].
+#' @aliases fwrite_tsv
 #' @export
 write_tsv.data.table <- function(x, file, sep = "\t", ...) { # nolint
   if (!identical(sep, "\t")) {
