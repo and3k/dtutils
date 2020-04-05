@@ -1,5 +1,5 @@
 .onAttach <- function(libname, pkgname) { # nolint
-  if (interactive()) {
+  if (interactive() || identical(Sys.getenv("TESTTHAT"), "true")) {
     if (!identical(getOption("datatable.na.strings"), "")) {
       packageStartupMessage(
         "To get empty string/NA compatibility between ",

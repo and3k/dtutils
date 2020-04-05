@@ -1,0 +1,2 @@
+To get empty string/NA compatibility between ‘write_tsv’ and ‘fread’ set:
+  options(datatable.na.strings = "").
