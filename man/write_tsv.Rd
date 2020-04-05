@@ -6,23 +6,23 @@
 \alias{fwrite_tsv}
 \title{TSV writer}
 \usage{
-write_tsv(x, file, sep = "\\t", ...)
+write_tsv(object, file, sep = "\\t", ...)
 
-\method{write_tsv}{data.table}(x, file, sep = "\\t", ...)
+\method{write_tsv}{data.table}(object, file, sep = "\\t", ...)
 }
 \arguments{
-\item{x}{An \R object to save as TSV.}
+\item{object}{An \R object to save as TSV.}
 
 \item{file}{Output file name.
 File extensions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a warning.}
 
-\item{sep}{Defaults to \code{"\\t"}. Cannot be changed.
+\item{sep}{Defaults to \code{"\\t"} and cannot be changed.
 Included for comptability with base methods and underlying methods.}
 
 \item{...}{Additional arguments to be passed to methods.}
 }
 \description{
-Writes an \R object to a tab-separated (TSV) file.
+Writes an \R object to a tab-separated values (TSV) file.
 }
 \section{Methods (by class)}{
 \itemize{
