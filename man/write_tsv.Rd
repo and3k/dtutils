@@ -17,7 +17,7 @@ write_tsv(object, file, sep = "\\t", ...)
 File extensions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a warning.}
 
 \item{sep}{Defaults to \code{"\\t"} and cannot be changed.
-Included for comptability with base methods and underlying methods.}
+Included for compatibility with base methods and underlying methods.}
 
 \item{...}{Additional arguments to be passed to methods.}
 }

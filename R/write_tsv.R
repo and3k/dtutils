@@ -6,7 +6,7 @@
 #' @param file Output file name.
 #'   File extensions other than `.tsv`, `.tab`, and `.txt` result in a warning.
 #' @param sep Defaults to `"\t"` and cannot be changed.
-#'   Included for comptability with base methods and underlying methods.
+#'   Included for compatibility with base methods and underlying methods.
 #' @param ... Additional arguments to be passed to methods.
 #' @examples
 #' library(data.table)
