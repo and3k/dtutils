@@ -23,44 +23,57 @@ test_that("write_tsv() works with data.table and special cases", {
   )
   write_tsv(dt, tf)
 
-  # fread and quoted double quotes does not work
+  # KNOWN ISSUE: fread() with quoted double-quotes does not work
   # see https://github.com/Rdatatable/data.table/issues/1109
+  # that is why the last row is not compared
   expect_equal(
     head(data.table::fread(tf, na.strings = ""), -1),
     head(dt, -1)
   )
 
-  dtraw <- data.table::fread(tf, sep = "")
+  res <- readLines(tf)
 
+  i <- 1
   # no quotations around normal strings
   expect_equal(
-    dtraw[1, ][[1]],
+    res[i],
+    paste0(colnames(dt)[1], "\t", colnames(dt)[2])
+  )
+  i <- i + 1
+  expect_equal(
+    res[i],
     paste0(dt$Number[1], "\t", dt$String[1])
   )
+  i <- i + 1
   expect_equal(
-    dtraw[2, ][[1]],
+    res[i],
     paste0(dt$Number[2], "\t", dt$String[2])
   )
+  i <- i + 1
   expect_equal(
-    paste0(dtraw[3, ][[1]], "\n", dtraw[3 + 1, ][[1]]),
+    paste0(res[i], "\n", res[i + 1]),
     paste0(dt$Number[3], "\t", "\"", dt$String[3], "\"")
   )
+  i <- i + 2
   # empty strings are exported as empty quoted strings
   expect_equal(
-    dtraw[4 + 1, ][[1]],
+    res[i],
     "4\t\"\""
   )
+  i <- i + 1
   # NAs exported as empty
   expect_equal(
-    dtraw[5 + 1, ][[1]],
+    res[i],
     "5\t"
   )
+  i <- i + 1
   expect_equal(
-    dtraw[6 + 1, ][[1]],
+    res[i],
     paste0(dt$Number[6], "\t", dt$String[6])
   )
+  i <- i + 1
   expect_equal(
-    dtraw[7 + 1, ][[1]],
+    res[i],
     paste0(dt$Number[7], "\t", "\"", gsub("\"", "\"\"", dt$String[7]), "\"")
   )
 })
