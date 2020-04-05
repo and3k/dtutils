@@ -13,3 +13,14 @@
 <!-- badges: end -->
 
 Convenience functions for the R package [data.table](https://github.com/Rdatatable/data.table).
+
+
+## Installation
+
+```r
+# Install the latest released version from GitHub:
+remotes::install_github("and3k/dtutils@*release")
+
+# Or the development version from GitHub:
+remotes::install_github("and3k/dtutils")
+```
