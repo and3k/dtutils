@@ -1,5 +1,5 @@
 Package: dtutils
-Version: 0.1.0.9000
+Version: 0.1.0.9001
 Title: Convenience Functions for the R Package data.table
 Description: dtutils provides convenience functions for the R package data.table.
 URL: https://github.com/and3k/dtutils
