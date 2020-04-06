@@ -31,5 +31,5 @@ write_tsv.data.table <- function(object, file, sep = "\t", ...) { # nolint
   if (!identical(sep, "\t")) {
     stop("The separator in TSV files needs to be \u2018\\t\u2019.")
   }
-  fwrite(x = object, file = file, sep = sep, ...)
+  data.table::fwrite(x = object, file = file, sep = sep, ...)
 }
