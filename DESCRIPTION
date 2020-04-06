@@ -1,22 +1,24 @@
 Package: dtutils
-Version: 0.1.0.9001
 Title: Convenience Functions for the R Package data.table
-Description: dtutils provides convenience functions for the R package data.table.
+Version: 0.1.0.9001
+Authors@R:
+    person(given = "Bela",
+           family = "Hausmann",
+           role = c("aut", "cre"),
+           email = "belahausmann@fsfe.org",
+           comment = c(ORCID = "https://orcid.org/0000-0002-0846-1202"))
+Description: dtutils provides convenience functions for the
+    R package data.table.
+License: MIT + file LICENSE
 URL: https://github.com/and3k/dtutils
 BugReports: https://github.com/and3k/dtutils/issues
-License: MIT + file LICENSE
-Authors@R:
-  person(
-    "Bela", "Hausmann", email = "belahausmann@fsfe.org", role = c("aut", "cre"),
-    comment = c(ORCID = "https://orcid.org/0000-0002-0846-1202")
-  )
 Imports:
     data.table (>= 1.9.8),
     magrittr,
     stringr
 Suggests:
-    testthat (>= 2.1.0),
-    spelling
+    spelling,
+    testthat (>= 2.1.0)
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
