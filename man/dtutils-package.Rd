@@ -6,12 +6,14 @@
 \alias{dtutils-package}
 \title{dtutils: Convenience Functions for the R Package data.table}
 \description{
-dtutils provides convenience functions for the R package data.table.
+dtutils provides convenience functions for the
+    R package data.table.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/and3k/dtutils}
+  \item Report bugs at \url{https://github.com/and3k/dtutils/issues}
 }
 
 }
