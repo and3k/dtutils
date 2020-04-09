@@ -9,7 +9,7 @@ test_that("write_tsv() works with data.table", {
   expect_equal(data.table::fread(tf), dt)
 })
 
-test_that("write_tsv() works with data.table and special cases", {
+test_that("write_tsv() works with special cases", {
   tf <- paste0(tempfile(), ".tsv")
   dt <- data.table::data.table(
     Number = 1:7,
@@ -103,9 +103,55 @@ test_that("write_tsv() warns about wrong extensions", {
   ))
 })
 
-test_that("write_tsv() works only with sep=\\t", {
+test_that("write_tsv() only works with sep=\\t", {
   tf <- paste0(tempfile(), ".tsv")
   dt <- data.table::data.table(x = 1:9)
   expect_error(write_tsv(dt, tf, sep = "\t"), NA)
   expect_error(write_tsv(dt, tf, sep = ","), "separator")
+})
+
+test_that("write_tsv() works with data.frame and row_names = FALSE", {
+  tf <- paste0(tempfile(), ".tsv")
+  write_tsv(mtcars, tf, row_names = FALSE)
+  df <- read.delim(tf)
+  rownames(mtcars) <- NULL
+  expect_equal(df, mtcars)
+})
+
+test_that("write_tsv() works with data.frame and row_names = TRUE", {
+  tf <- paste0(tempfile(), ".tsv")
+  write_tsv(mtcars, tf, row_names = TRUE)
+  df <- read.delim(tf, row.names = 1)
+  expect_equal(df, mtcars)
+})
+
+test_that("write_tsv() and non-boolean row_names values", {
+  tf <- paste0(tempfile(), ".tsv")
+  df <- data.frame(
+    number = 1:3,
+    string = c("foo", "bar, baz", "Lorem ipsum dolor sit amet"),
+    stringsAsFactors = FALSE
+  )
+  dt <- data.table::as.data.table(df)
+
+  # automatic row names are not written
+  write_tsv(df, tf)
+  expect_equal(data.table::fread(tf), dt)
+
+  rn <- letters[1:3]
+  row.names(df) <- rn
+
+  # explicit row names are written
+  write_tsv(df, tf)
+  expect_equal(
+    data.table::fread(tf),
+    data.table::data.table(rn = rn, dt)
+  )
+
+  # row names name can be given
+  write_tsv(df, tf, row_names = "these_are_the_row_names")
+  expect_equal(
+    data.table::fread(tf),
+    data.table::data.table(these_are_the_row_names = rn, dt)
+  )
 })

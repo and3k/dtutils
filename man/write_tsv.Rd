@@ -4,11 +4,14 @@
 \alias{write_tsv}
 \alias{write_tsv.data.table}
 \alias{fwrite_tsv}
+\alias{write_tsv.data.frame}
 \title{TSV writer}
 \usage{
 write_tsv(object, file, sep = "\\t", ...)
 
 \method{write_tsv}{data.table}(object, file, sep = "\\t", ...)
+
+\method{write_tsv}{data.frame}(object, file, sep = "\\t", ..., row_names = NULL)
 }
 \arguments{
 \item{object}{An \R object to save as TSV.}
@@ -20,6 +23,13 @@ File extensions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a
 Included for compatibility with base methods and underlying methods.}
 
 \item{...}{Additional arguments to be passed to methods.}
+
+\item{row_names}{For \R objects with row names.
+\code{FALSE} omits writing row names. \code{TRUE} writes row names.
+A single string can be given instead of \code{TRUE}
+to set the column name for the row names.
+Per default, row names are written, expect if
+they are automatic row names (i.e., numbered).}
 }
 \description{
 Writes an \R object to a tab-separated values (TSV) file.
@@ -27,11 +37,18 @@ Writes an \R object to a tab-separated values (TSV) file.
 \section{Methods (by class)}{
 \itemize{
 \item \code{data.table}: Writes a \link{data.table} using \code{\link[data.table:fwrite]{data.table::fwrite()}}.
+
+\item \code{data.frame}: Writes a \link{data.frame} using \code{\link[data.table:fwrite]{data.table::fwrite()}}.
 }}
 
 \examples{
-library(data.table)
-mtcars_dt <- as.data.table(mtcars, keep.rownames = TRUE)
 library(dtutils)
+
+# write a data.table
+mtcars_dt <- data.table::as.data.table(mtcars, keep.rownames = TRUE)
 write_tsv(mtcars_dt, "mtcars.tsv")
+
+# write a data.frame
+write_tsv(mtcars, "mtcars.tsv")
+write_tsv(mtcars, "mtcars.tsv", row_names = "ROWNAMES")
 }

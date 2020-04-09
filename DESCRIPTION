@@ -15,6 +15,7 @@ BugReports: https://github.com/and3k/dtutils/issues
 Imports:
     data.table (>= 1.9.8),
     magrittr,
+    rlang,
     stringr
 Suggests:
     spelling,
