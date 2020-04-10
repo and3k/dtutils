@@ -148,3 +148,19 @@ test_that("write_tsv() and non-boolean row_names values", {
     data.table(these_are_the_row_names = rn, dt)
   )
 })
+
+test_that("write_tsv() works with matrix", {
+  tf <- paste0(tempfile(), ".tsv")
+  m <- matrix(1:50, ncol = 5)
+
+  write_tsv(m, tf)
+  expect_equal(fread(tf, sep = "\t"), as.data.table(m, keep.rownames = FALSE))
+
+  colnames(m) <- paste0("col_", letters[1:5])
+  write_tsv(m, tf)
+  expect_equal(fread(tf, sep = "\t"), as.data.table(m, keep.rownames = FALSE))
+
+  rownames(m) <- paste0("row_", letters[1:10])
+  write_tsv(m, tf)
+  expect_equal(fread(tf, sep = "\t"), as.data.table(m, keep.rownames = TRUE))
+})

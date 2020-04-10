@@ -1,6 +1,6 @@
 Package: dtutils
 Title: Convenience Functions for the R Package data.table
-Version: 0.1.0.9003
+Version: 0.1.0.9004
 Authors@R:
     person(given = "Bela",
            family = "Hausmann",

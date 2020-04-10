@@ -5,6 +5,7 @@
 \alias{write_tsv.data.table}
 \alias{fwrite_tsv}
 \alias{write_tsv.data.frame}
+\alias{write_tsv.matrix}
 \title{TSV writer}
 \usage{
 write_tsv(object, file, ...)
@@ -12,6 +13,8 @@ write_tsv(object, file, ...)
 \method{write_tsv}{data.table}(object, file, ...)
 
 \method{write_tsv}{data.frame}(object, file, ..., row_names)
+
+\method{write_tsv}{matrix}(object, file, ..., row_names)
 }
 \arguments{
 \item{object}{An \R object to save as TSV.}
@@ -36,6 +39,8 @@ Writes an \R object to a tab-separated values (TSV) file.
 \item \code{data.table}: Writes a \link{data.table} using \code{\link[data.table:fwrite]{data.table::fwrite()}}.
 
 \item \code{data.frame}: Writes a \link{data.frame} using \code{\link[data.table:fwrite]{data.table::fwrite()}}.
+
+\item \code{matrix}: Writes a \link{matrix} using \code{\link[data.table:fwrite]{data.table::fwrite()}}.
 }}
 
 \examples{
@@ -48,4 +53,11 @@ write_tsv(mtcars_dt, "mtcars.tsv")
 # write a data.frame
 write_tsv(mtcars, "mtcars.tsv")
 write_tsv(mtcars, "mtcars.tsv", row_names = "ROWNAMES")
+
+# write a matrix
+x <- matrix(runif(100), ncol = 5)
+colnames(x) <- paste0("col_", letters[1:5])
+write_tsv(x, "matrix.tsv")
+rownames(x) <- paste0("row_", letters[1:20])
+write_tsv(x, "matrix_with_row_names.tsv")
 }

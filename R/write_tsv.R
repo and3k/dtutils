@@ -58,3 +58,18 @@ write_tsv.data.frame <- function(object, file, ..., row_names) { # nolint
   object <- data.table::as.data.table(object, keep.rownames = row_names)
   write_tsv(object, file, ...)
 }
+
+#' @describeIn write_tsv Writes a [matrix] using [data.table::fwrite()].
+#' @examples
+#'
+#' # write a matrix
+#' x <- matrix(runif(100), ncol = 5)
+#' colnames(x) <- paste0("col_", letters[1:5])
+#' write_tsv(x, "matrix.tsv")
+#' rownames(x) <- paste0("row_", letters[1:20])
+#' write_tsv(x, "matrix_with_row_names.tsv")
+#' @export
+write_tsv.matrix <- function(object, file, ..., row_names) { # nolint
+  object <- as.data.frame(object)
+  write_tsv(object, file, ...)
+}
