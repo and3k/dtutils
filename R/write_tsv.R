@@ -5,22 +5,16 @@
 #' @param object An \R object to save as TSV.
 #' @param file Output file name.
 #'   File extensions other than `.tsv`, `.tab`, and `.txt` result in a warning.
-#' @param sep Defaults to `"\t"` and cannot be changed.
-#'   Included for compatibility with base methods and underlying methods.
 #' @param ... Additional arguments to be passed to methods.
 #' @examples
 #' library(dtutils)
 #' @export
-write_tsv <- function(object, file, sep = "\t", ...) {
+write_tsv <- function(object, file, ...) {
   if (!all(stringr::str_detect(
     file,
     stringr::regex("\\.(tsv|tab|txt)$", ignore_case = TRUE)
   ))) {
     warning("TSV files should have the extension \u2018.tsv\u2019.")
-  }
-
-  if (!identical(sep, "\t")) {
-    stop("The separator in TSV files needs to be \u2018\\t\u2019.")
   }
 
   UseMethod("write_tsv")
@@ -34,8 +28,8 @@ write_tsv <- function(object, file, sep = "\t", ...) {
 #' mtcars_dt <- data.table::as.data.table(mtcars, keep.rownames = TRUE)
 #' write_tsv(mtcars_dt, "mtcars.tsv")
 #' @export
-write_tsv.data.table <- function(object, file, sep = "\t", ...) { # nolint
-  data.table::fwrite(x = object, file = file, sep = sep, ...)
+write_tsv.data.table <- function(object, file, ...) { # nolint
+  data.table::fwrite(x = object, file = file, sep = "\t", ...)
 }
 
 #' @describeIn write_tsv Writes a [data.frame] using [data.table::fwrite()].
@@ -51,10 +45,8 @@ write_tsv.data.table <- function(object, file, sep = "\t", ...) { # nolint
 #' write_tsv(mtcars, "mtcars.tsv")
 #' write_tsv(mtcars, "mtcars.tsv", row_names = "ROWNAMES")
 #' @export
-write_tsv.data.frame <- function(object, file, sep = "\t", ..., row_names = NULL) { # nolint
-  if (rlang::is_bool(row_names) || rlang::is_string(row_names)) {
-    # a valid choice was made
-  } else {
+write_tsv.data.frame <- function(object, file, ..., row_names) { # nolint
+  if (missing(row_names)) {
     if (identical(attr(object, "row.names"), seq_len(nrow(object)))) {
       # automatic row names are not written, see also ?row.names
       row_names <- FALSE
@@ -64,5 +56,5 @@ write_tsv.data.frame <- function(object, file, sep = "\t", ..., row_names = NULL
   }
 
   object <- data.table::as.data.table(object, keep.rownames = row_names)
-  write_tsv(object, file, sep, ...)
+  write_tsv(object, file, ...)
 }

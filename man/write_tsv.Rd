@@ -7,20 +7,17 @@
 \alias{write_tsv.data.frame}
 \title{TSV writer}
 \usage{
-write_tsv(object, file, sep = "\\t", ...)
+write_tsv(object, file, ...)
 
-\method{write_tsv}{data.table}(object, file, sep = "\\t", ...)
+\method{write_tsv}{data.table}(object, file, ...)
 
-\method{write_tsv}{data.frame}(object, file, sep = "\\t", ..., row_names = NULL)
+\method{write_tsv}{data.frame}(object, file, ..., row_names)
 }
 \arguments{
 \item{object}{An \R object to save as TSV.}
 
 \item{file}{Output file name.
 File extensions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a warning.}
-
-\item{sep}{Defaults to \code{"\\t"} and cannot be changed.
-Included for compatibility with base methods and underlying methods.}
 
 \item{...}{Additional arguments to be passed to methods.}
 

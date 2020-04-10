@@ -6,7 +6,7 @@ test_that("write_tsv() works with data.table", {
     String = c("foo", "bar, baz", "Lorem ipsum dolor sit amet")
   )
   write_tsv(dt, tf)
-  expect_equal(fread(tf), dt)
+  expect_equal(fread(tf, sep = "\t"), dt)
 })
 
 test_that("write_tsv() works with special cases", {
@@ -27,7 +27,7 @@ test_that("write_tsv() works with special cases", {
   # see https://github.com/Rdatatable/data.table/issues/1109
   # that is why the last row is not compared
   expect_equal(
-    head(fread(tf, na.strings = ""), -1),
+    head(fread(tf, sep = "\t", na.strings = ""), -1),
     head(dt, -1)
   )
 
@@ -103,13 +103,6 @@ test_that("write_tsv() warns about wrong extensions", {
   ))
 })
 
-test_that("write_tsv() only works with sep=\\t", {
-  tf <- paste0(tempfile(), ".tsv")
-  dt <- data.table(x = 1:9)
-  expect_error(write_tsv(dt, tf, sep = "\t"), NA)
-  expect_error(write_tsv(dt, tf, sep = ","), "separator")
-})
-
 test_that("write_tsv() works with data.frame and row_names = FALSE", {
   tf <- paste0(tempfile(), ".tsv")
   write_tsv(mtcars, tf, row_names = FALSE)
@@ -136,7 +129,7 @@ test_that("write_tsv() and non-boolean row_names values", {
 
   # automatic row names are not written
   write_tsv(df, tf)
-  expect_equal(fread(tf), dt)
+  expect_equal(fread(tf, sep = "\t"), dt)
 
   rn <- letters[1:3]
   row.names(df) <- rn
@@ -144,14 +137,14 @@ test_that("write_tsv() and non-boolean row_names values", {
   # explicit row names are written
   write_tsv(df, tf)
   expect_equal(
-    fread(tf),
+    fread(tf, sep = "\t"),
     data.table(rn = rn, dt)
   )
 
   # row names name can be given
   write_tsv(df, tf, row_names = "these_are_the_row_names")
   expect_equal(
-    fread(tf),
+    fread(tf, sep = "\t"),
     data.table(these_are_the_row_names = rn, dt)
   )
 })
