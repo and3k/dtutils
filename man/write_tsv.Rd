@@ -14,7 +14,7 @@ write_tsv(object, file, ...)
 
 \method{write_tsv}{data.frame}(object, file, ..., row_names)
 
-\method{write_tsv}{matrix}(object, file, ..., row_names)
+\method{write_tsv}{matrix}(object, file, ..., row_names, col_names)
 }
 \arguments{
 \item{object}{An \R object to save as TSV.}
@@ -30,6 +30,8 @@ A single string can be given instead of \code{TRUE}
 to set the column name for the row names.
 Per default, row names are written, expect if
 they are automatic row names (i.e., numbered).}
+
+\item{col_names}{Analogous to \code{row_names}.}
 }
 \description{
 Writes an \R object to a tab-separated values (TSV) file.

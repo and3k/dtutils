@@ -151,16 +151,47 @@ test_that("write_tsv() and non-boolean row_names values", {
 
 test_that("write_tsv() works with matrix", {
   tf <- paste0(tempfile(), ".tsv")
-  m <- matrix(1:50, ncol = 5)
+  m0 <- matrix(101:150, ncol = 5)
 
-  write_tsv(m, tf)
-  expect_equal(fread(tf, sep = "\t"), as.data.table(m, keep.rownames = FALSE))
+  write_tsv(m0, tf)
+  expect_equal(
+    fread(tf, sep = "\t", header = FALSE),
+    as.data.table(m0)
+  )
+  write_tsv(m0, tf, col_names = TRUE)
+  expect_equal(
+    fread(tf, sep = "\t", header = TRUE),
+    as.data.table(m0)
+  )
+  write_tsv(m0, tf, col_names = TRUE, row_names = TRUE)
+  expect_equal(
+    fread(tf, sep = "\t", header = TRUE),
+    setcolorder(as.data.table(m0)[, rn := 1:10][], 'rn')[]
+  )
 
-  colnames(m) <- paste0("col_", letters[1:5])
-  write_tsv(m, tf)
-  expect_equal(fread(tf, sep = "\t"), as.data.table(m, keep.rownames = FALSE))
+  m1 <- m0
+  colnames(m1) <- paste0("col_", letters[1:5])
+  write_tsv(m1, tf)
+  expect_equal(
+    fread(tf, sep = "\t", header = TRUE),
+    as.data.table(m1, keep.rownames = FALSE)
+  )
+  write_tsv(m1, tf, col_names = FALSE)
+  expect_equal(
+    fread(tf, sep = "\t", header = FALSE),
+    as.data.table(m0, keep.rownames = FALSE)
+  )
 
-  rownames(m) <- paste0("row_", letters[1:10])
-  write_tsv(m, tf)
-  expect_equal(fread(tf, sep = "\t"), as.data.table(m, keep.rownames = TRUE))
+  m2 <- m1
+  rownames(m2) <- paste0("row_", letters[1:10])
+  write_tsv(m2, tf)
+  expect_equal(
+    fread(tf, sep = "\t", header = TRUE),
+    as.data.table(m2, keep.rownames = TRUE)
+  )
+  write_tsv(m2, tf, row_names = FALSE)
+  expect_equal(
+    fread(tf, sep = "\t", header = TRUE),
+    as.data.table(m2, keep.rownames = FALSE)
+  )
 })

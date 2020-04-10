@@ -60,6 +60,7 @@ write_tsv.data.frame <- function(object, file, ..., row_names) { # nolint
 }
 
 #' @describeIn write_tsv Writes a [matrix] using [data.table::fwrite()].
+#' @param col_names Analogous to `row_names`.
 #' @examples
 #'
 #' # write a matrix
@@ -69,7 +70,16 @@ write_tsv.data.frame <- function(object, file, ..., row_names) { # nolint
 #' rownames(x) <- paste0("row_", letters[1:20])
 #' write_tsv(x, "matrix_with_row_names.tsv")
 #' @export
-write_tsv.matrix <- function(object, file, ..., row_names) { # nolint
+write_tsv.matrix <- function(object, file, ..., row_names, col_names) { # nolint
+  if (missing(col_names)) {
+    if (is.null(attributes(object)$dimnames[[2]])) {
+      # col names are only written if they exist
+      col_names <- FALSE
+    } else {
+      col_names <- TRUE
+    }
+  }
+
   object <- as.data.frame(object)
-  write_tsv(object, file, ...)
+  write_tsv(object, file, row_names = row_names, col.names = col_names, ...)
 }
