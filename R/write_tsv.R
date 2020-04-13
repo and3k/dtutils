@@ -10,11 +10,10 @@
 #'   File extensions other than `.tsv`, `.tab`, and `.txt` result in a warning.
 #' @param header Should the column names be written?
 internal_write_tsv <- function(object, file, header = TRUE) {
-  if (!all(stringr::str_detect(
-    file,
+  if (!all(stringr::str_detect(file,
     stringr::regex("\\.(tsv|tab|txt)$", ignore_case = TRUE)
   ))) {
-    warning("TSV files should have the extension \u2018.tsv\u2019.")
+    rlang::warn("TSV files should have the extension \u2018.tsv\u2019.")
   }
 
   data.table::fwrite(
@@ -66,13 +65,12 @@ write_tsv.data.table <- function(object, file, ...) { # nolint
 #' write_tsv(mtcars, "mtcars.tsv", row_names = "ROWNAMES")
 #' @export
 write_tsv.data.frame <- function(object, file, row_names, ...) { # nolint
-  if (missing(row_names)) {
-    if (identical(attr(object, "row.names"), seq_len(nrow(object)))) {
-      # automatic row names are not written, see also ?row.names
-      row_names <- FALSE
-    } else {
-      row_names <- TRUE
-    }
+  if (rlang::is_missing(row_names)) {
+    # seq_len(nrow(x)) is the default, see ?row.names
+    row_names <- ! identical(
+      attr(object, "row.names"),
+      seq_len(nrow(object))
+    )
   }
 
   object <- data.table::as.data.table(object, keep.rownames = row_names)
@@ -92,21 +90,11 @@ write_tsv.data.frame <- function(object, file, row_names, ...) { # nolint
 #' write_tsv(x, "matrix_with_column_and_row_names.tsv")
 #' @export
 write_tsv.matrix <- function(object, file, row_names, col_names, ...) { # nolint
-  if (missing(row_names)) {
-    if (is.null(attributes(object)$dimnames[[1]])) {
-      # row names are only written if they exist
-      row_names <- FALSE
-    } else {
-      row_names <- TRUE
-    }
+  if (rlang::is_missing(row_names)) {
+    row_names <- ! rlang::is_null(dimnames(object)[[1]])
   }
-  if (missing(col_names)) {
-    if (is.null(attributes(object)$dimnames[[2]])) {
-      # col names are only written if they exist
-      col_names <- FALSE
-    } else {
-      col_names <- TRUE
-    }
+  if (rlang::is_missing(col_names)) {
+    col_names <- ! rlang::is_null(dimnames(object)[[2]])
   }
 
   object <-

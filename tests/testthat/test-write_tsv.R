@@ -175,13 +175,12 @@ test_that("write_tsv() works with matrix", {
 
   write_tsv(m0, tf, col_names = TRUE, row_names = TRUE)
   expect_identical(readLines(tf, 1), paste0("rn\t", first_row_named))
-  expect_equal(
-    fread(tf, sep = "\t", header = TRUE),
-    setcolorder(as.data.table(m0)[, rn := 1:10][], "rn")[]
-  )
 
   write_tsv(m0, tf, col_names = TRUE, row_names = "these_are_the_row_names")
-  expect_identical(readLines(tf, 1), paste0("these_are_the_row_names\t", first_row_named))
+  expect_identical(
+    readLines(tf, 1),
+    paste0("these_are_the_row_names\t", first_row_named)
+  )
 
   # MATRIX WITH COLUM NAMES
 
