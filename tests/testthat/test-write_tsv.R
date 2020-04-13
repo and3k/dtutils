@@ -151,45 +151,73 @@ test_that("write_tsv() and non-boolean row_names values", {
 
 test_that("write_tsv() works with matrix", {
   tf <- paste0(tempfile(), ".tsv")
+
+  first_row_plain <- "101\t111\t121\t131\t141"
+
+  # PLAIN MATRIX
+
   m0 <- matrix(101:150, ncol = 5)
+  first_row_named <- "V1\tV2\tV3\tV4\tV5"
 
   write_tsv(m0, tf)
+  expect_identical(readLines(tf, 1), first_row_plain)
   expect_equal(
     fread(tf, sep = "\t", header = FALSE),
     as.data.table(m0)
   )
+
   write_tsv(m0, tf, col_names = TRUE)
+  expect_identical(readLines(tf, 1), first_row_named)
   expect_equal(
     fread(tf, sep = "\t", header = TRUE),
     as.data.table(m0)
   )
+
   write_tsv(m0, tf, col_names = TRUE, row_names = TRUE)
+  expect_identical(readLines(tf, 1), paste0("rn\t", first_row_named))
   expect_equal(
     fread(tf, sep = "\t", header = TRUE),
-    setcolorder(as.data.table(m0)[, rn := 1:10][], 'rn')[]
+    setcolorder(as.data.table(m0)[, rn := 1:10][], "rn")[]
   )
 
+  write_tsv(m0, tf, col_names = TRUE, row_names = "these_are_the_row_names")
+  expect_identical(readLines(tf, 1), paste0("these_are_the_row_names\t", first_row_named))
+
+  # MATRIX WITH COLUM NAMES
+
   m1 <- m0
-  colnames(m1) <- paste0("col_", letters[1:5])
+  cn <- paste0("col_", letters[1:5])
+  colnames(m1) <- cn
+  first_row_named <- paste0(cn, collapse = '\t')
+
   write_tsv(m1, tf)
+  expect_identical(readLines(tf, 1), first_row_named)
   expect_equal(
     fread(tf, sep = "\t", header = TRUE),
     as.data.table(m1, keep.rownames = FALSE)
   )
+
   write_tsv(m1, tf, col_names = FALSE)
+  expect_identical(readLines(tf, 1), first_row_plain)
   expect_equal(
     fread(tf, sep = "\t", header = FALSE),
     as.data.table(m0, keep.rownames = FALSE)
   )
 
+  # MATRIX WITH COLUM AND ROW NAMES
+
   m2 <- m1
   rownames(m2) <- paste0("row_", letters[1:10])
+
   write_tsv(m2, tf)
+  expect_identical(readLines(tf, 1), paste0("rn\t", first_row_named))
   expect_equal(
     fread(tf, sep = "\t", header = TRUE),
     as.data.table(m2, keep.rownames = TRUE)
   )
+
   write_tsv(m2, tf, row_names = FALSE)
+  expect_identical(readLines(tf, 1), first_row_named)
   expect_equal(
     fread(tf, sep = "\t", header = TRUE),
     as.data.table(m2, keep.rownames = FALSE)
