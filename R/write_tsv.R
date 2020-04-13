@@ -1,15 +1,15 @@
-#' TSV writer
+#' Internal wrapper for `fwrite`
 #'
-#' Writes an \R object to a tab-separated values (TSV) file.
+#' Calls [data.table::fwrite()] with appropriate arguments:
+#' * The column separator is always `"\t"`.
+#' * The line separator is always `"\n"`,
+#'   independent of the operating system.
 #'
 #' @param object An \R object to save as TSV.
 #' @param file Output file name.
 #'   File extensions other than `.tsv`, `.tab`, and `.txt` result in a warning.
-#' @param ... Additional arguments to be passed to methods.
-#' @examples
-#' library(dtutils)
-#' @export
-write_tsv <- function(object, file, ...) {
+#' @param header Should the column names be written?
+internal_write_tsv <- function(object, file, header = TRUE) {
   if (!all(stringr::str_detect(
     file,
     stringr::regex("\\.(tsv|tab|txt)$", ignore_case = TRUE)
@@ -17,6 +17,26 @@ write_tsv <- function(object, file, ...) {
     warning("TSV files should have the extension \u2018.tsv\u2019.")
   }
 
+  data.table::fwrite(
+    x = object,
+    file = file,
+    sep = "\t",
+    eol = "\n",
+    col.names = header
+  )
+}
+
+#' TSV writer
+#'
+#' Writes an \R object to a tab-separated values (TSV) file.
+#'
+#' @inheritParams internal_write_tsv
+#' @param ... Additional arguments to be passed to methods (see below).
+#'   All additional arguments in methods are ignored.
+#' @examples
+#' library(dtutils)
+#' @export
+write_tsv <- function(object, file, ...) {
   UseMethod("write_tsv")
 }
 
@@ -29,7 +49,7 @@ write_tsv <- function(object, file, ...) {
 #' write_tsv(mtcars_dt, "mtcars.tsv")
 #' @export
 write_tsv.data.table <- function(object, file, ...) { # nolint
-  data.table::fwrite(x = object, file = file, sep = "\t", ...)
+  internal_write_tsv(object = object, file = file)
 }
 
 #' @describeIn write_tsv Writes a [data.frame] using [data.table::fwrite()].
@@ -45,7 +65,7 @@ write_tsv.data.table <- function(object, file, ...) { # nolint
 #' write_tsv(mtcars, "mtcars.tsv")
 #' write_tsv(mtcars, "mtcars.tsv", row_names = "ROWNAMES")
 #' @export
-write_tsv.data.frame <- function(object, file, ..., row_names) { # nolint
+write_tsv.data.frame <- function(object, file, row_names, ...) { # nolint
   if (missing(row_names)) {
     if (identical(attr(object, "row.names"), seq_len(nrow(object)))) {
       # automatic row names are not written, see also ?row.names
@@ -56,7 +76,7 @@ write_tsv.data.frame <- function(object, file, ..., row_names) { # nolint
   }
 
   object <- data.table::as.data.table(object, keep.rownames = row_names)
-  write_tsv(object, file, ...)
+  internal_write_tsv(object = object, file = file)
 }
 
 #' @describeIn write_tsv Writes a [matrix] using [data.table::fwrite()].
@@ -65,12 +85,21 @@ write_tsv.data.frame <- function(object, file, ..., row_names) { # nolint
 #'
 #' # write a matrix
 #' x <- matrix(runif(100), ncol = 5)
-#' colnames(x) <- paste0("col_", letters[1:5])
 #' write_tsv(x, "matrix.tsv")
+#' colnames(x) <- paste0("col_", letters[1:5])
+#' write_tsv(x, "matrix_with_column_names.tsv")
 #' rownames(x) <- paste0("row_", letters[1:20])
-#' write_tsv(x, "matrix_with_row_names.tsv")
+#' write_tsv(x, "matrix_with_column_and_row_names.tsv")
 #' @export
-write_tsv.matrix <- function(object, file, ..., row_names, col_names) { # nolint
+write_tsv.matrix <- function(object, file, row_names, col_names, ...) { # nolint
+  if (missing(row_names)) {
+    if (is.null(attributes(object)$dimnames[[1]])) {
+      # row names are only written if they exist
+      row_names <- FALSE
+    } else {
+      row_names <- TRUE
+    }
+  }
   if (missing(col_names)) {
     if (is.null(attributes(object)$dimnames[[2]])) {
       # col names are only written if they exist
@@ -80,6 +109,10 @@ write_tsv.matrix <- function(object, file, ..., row_names, col_names) { # nolint
     }
   }
 
-  object <- as.data.frame(object)
-  write_tsv(object, file, row_names = row_names, col.names = col_names, ...)
+  object <-
+    data.table::as.data.table(
+      as.data.frame(object),
+      keep.rownames = row_names
+    )
+  internal_write_tsv(object = object, file = file, header = col_names)
 }

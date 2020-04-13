@@ -12,9 +12,9 @@ write_tsv(object, file, ...)
 
 \method{write_tsv}{data.table}(object, file, ...)
 
-\method{write_tsv}{data.frame}(object, file, ..., row_names)
+\method{write_tsv}{data.frame}(object, file, row_names, ...)
 
-\method{write_tsv}{matrix}(object, file, ..., row_names, col_names)
+\method{write_tsv}{matrix}(object, file, row_names, col_names, ...)
 }
 \arguments{
 \item{object}{An \R object to save as TSV.}
@@ -22,7 +22,8 @@ write_tsv(object, file, ...)
 \item{file}{Output file name.
 File extensions other than \code{.tsv}, \code{.tab}, and \code{.txt} result in a warning.}
 
-\item{...}{Additional arguments to be passed to methods.}
+\item{...}{Additional arguments to be passed to methods (see below).
+All additional arguments in methods are ignored.}
 
 \item{row_names}{For \R objects with row names.
 \code{FALSE} omits writing row names. \code{TRUE} writes row names.
@@ -58,8 +59,9 @@ write_tsv(mtcars, "mtcars.tsv", row_names = "ROWNAMES")
 
 # write a matrix
 x <- matrix(runif(100), ncol = 5)
-colnames(x) <- paste0("col_", letters[1:5])
 write_tsv(x, "matrix.tsv")
+colnames(x) <- paste0("col_", letters[1:5])
+write_tsv(x, "matrix_with_column_names.tsv")
 rownames(x) <- paste0("row_", letters[1:20])
-write_tsv(x, "matrix_with_row_names.tsv")
+write_tsv(x, "matrix_with_column_and_row_names.tsv")
 }
