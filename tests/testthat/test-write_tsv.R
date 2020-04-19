@@ -5,11 +5,13 @@ test_that("write_tsv() writes data.tables", {
   write_tsv(dt, tf)
 
   # this makes sure the output is absolutely identical to the reference,
-  # as writeLines/readLines does some processing (e.g., EOL conversions)
+  # as readLines does some processing (i.e., doesn’t care about EOL)
   expect_identical(
     digest::digest(tf, file = TRUE),
     digest::digest(test_path("TSVs/mtcars_with_row_names.tsv"), file = TRUE)
   )
+  # once more, because EOL is so unpredictable
+  expect_identical(digest::digest(tf, file = TRUE), "749a7bfc1e4492f1e5adc77fa7349455")
   # however, this has a better output for debugging than comparing digests
   expect_known_output(
     writeLines(readLines(tf)),
