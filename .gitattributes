@@ -1,0 +1,2 @@
+# these need to be absolutely identical for write_tsv() tests
+tests/testthat/TSVs/*.tsv -text
