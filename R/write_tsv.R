@@ -10,7 +10,8 @@
 #'   File extensions other than `.tsv`, `.tab`, and `.txt` result in a warning.
 #' @param header Should the column names be written?
 internal_write_tsv <- function(object, file, header = TRUE) {
-  if (!all(stringr::str_detect(file,
+  if (!all(stringr::str_detect(
+    file,
     stringr::regex("\\.(tsv|tab|txt)$", ignore_case = TRUE)
   ))) {
     rlang::warn("TSV files should have the extension \u2018.tsv\u2019.")
@@ -67,7 +68,7 @@ write_tsv.data.table <- function(object, file, ...) { # nolint
 write_tsv.data.frame <- function(object, file, row_names, ...) { # nolint
   if (rlang::is_missing(row_names)) {
     # seq_len(nrow(x)) is the default, see ?row.names
-    row_names <- ! identical(
+    row_names <- !identical(
       attr(object, "row.names"),
       seq_len(nrow(object))
     )
@@ -91,10 +92,10 @@ write_tsv.data.frame <- function(object, file, row_names, ...) { # nolint
 #' @export
 write_tsv.matrix <- function(object, file, row_names, col_names, ...) { # nolint
   if (rlang::is_missing(row_names)) {
-    row_names <- ! rlang::is_null(dimnames(object)[[1]])
+    row_names <- !rlang::is_null(dimnames(object)[[1]])
   }
   if (rlang::is_missing(col_names)) {
-    col_names <- ! rlang::is_null(dimnames(object)[[2]])
+    col_names <- !rlang::is_null(dimnames(object)[[2]])
   }
 
   object <-

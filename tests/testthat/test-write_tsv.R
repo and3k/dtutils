@@ -1,10 +1,10 @@
 test_that("write_tsv() writes data.tables", {
-  dt <- data.table::as.data.table(mtcars, keep.rownames = 'row names')
+  dt <- data.table::as.data.table(mtcars, keep.rownames = "row names")
 
   tf <- tempfile(fileext = ".tsv")
   write_tsv(dt, tf)
 
-  # this makes sure the output is absolutly identical to the reference,
+  # this makes sure the output is absolutely identical to the reference,
   # as writeLines/readLines does some processing (e.g., EOL conversions)
   expect_identical(
     digest::digest(tf, file = TRUE),
@@ -196,7 +196,7 @@ test_that("write_tsv() works with matrix", {
   m1 <- m0
   cn <- paste0("col_", letters[1:5])
   colnames(m1) <- cn
-  first_row_named <- paste0(cn, collapse = '\t')
+  first_row_named <- paste0(cn, collapse = "\t")
 
   write_tsv(m1, tf)
   expect_identical(readLines(tf, 1), first_row_named)
