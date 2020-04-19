@@ -1,17 +1,26 @@
-test_that("write_tsv() works with data.table", {
-  tf <- paste0(tempfile(), ".tsv")
-  dt <- data.table(
-    Number = c(1, NA, 2),
-    Bool = c(T, F, NA),
-    String = c("foo", "bar, baz", "Lorem ipsum dolor sit amet")
-  )
+test_that("write_tsv() writes data.tables", {
+  dt <- data.table::as.data.table(mtcars, keep.rownames = 'row names')
+
+  tf <- tempfile(fileext = ".tsv")
   write_tsv(dt, tf)
-  expect_equal(fread(tf, sep = "\t"), dt)
+
+  # this makes sure the output is absolutly identical to the reference,
+  # as writeLines/readLines does some processing (e.g., EOL conversions)
+  expect_identical(
+    digest::digest(tf, file = TRUE),
+    digest::digest(test_path("TSVs/mtcars_with_row_names.tsv"), file = TRUE)
+  )
+  # however, this has a better output for debugging than comparing digests
+  expect_known_output(
+    writeLines(readLines(tf)),
+    test_path("TSVs/mtcars_with_row_names.tsv"),
+    update = FALSE
+  )
 })
 
 test_that("write_tsv() works with special cases", {
   tf <- paste0(tempfile(), ".tsv")
-  dt <- data.table(
+  dt <- data.table::data.table(
     Number = 1:7,
     String = c(
       "foo", "bar, baz",
@@ -27,7 +36,7 @@ test_that("write_tsv() works with special cases", {
   # see https://github.com/Rdatatable/data.table/issues/1109
   # that is why the last row is not compared
   expect_equal(
-    head(fread(tf, sep = "\t", na.strings = ""), -1),
+    head(data.table::fread(tf, sep = "\t", na.strings = ""), -1),
     head(dt, -1)
   )
 
@@ -83,7 +92,7 @@ test_that("write_tsv() warns about wrong extensions", {
   tf_tab <- paste0(tempfile(), ".tab")
   tf_txt <- paste0(tempfile(), ".txt")
   tf_csv <- paste0(tempfile(), ".csv") # wrong!
-  dt <- data.table(x = 1:9)
+  dt <- data.table::data.table(x = 1:9)
 
   expect_warning(write_tsv(dt, tf_tsv), NA)
   expect_warning(write_tsv(dt, tf_tab), NA)
@@ -125,11 +134,11 @@ test_that("write_tsv() and non-boolean row_names values", {
     string = c("foo", "bar, baz", "Lorem ipsum dolor sit amet"),
     stringsAsFactors = FALSE
   )
-  dt <- as.data.table(df)
+  dt <- data.table::as.data.table(df)
 
   # automatic row names are not written
   write_tsv(df, tf)
-  expect_equal(fread(tf, sep = "\t"), dt)
+  expect_equal(data.table::fread(tf, sep = "\t"), dt)
 
   rn <- letters[1:3]
   row.names(df) <- rn
@@ -137,15 +146,15 @@ test_that("write_tsv() and non-boolean row_names values", {
   # explicit row names are written
   write_tsv(df, tf)
   expect_equal(
-    fread(tf, sep = "\t"),
-    data.table(rn = rn, dt)
+    data.table::fread(tf, sep = "\t"),
+    data.table::data.table(rn = rn, dt)
   )
 
   # row names name can be given
   write_tsv(df, tf, row_names = "these_are_the_row_names")
   expect_equal(
-    fread(tf, sep = "\t"),
-    data.table(these_are_the_row_names = rn, dt)
+    data.table::fread(tf, sep = "\t"),
+    data.table::data.table(these_are_the_row_names = rn, dt)
   )
 })
 
@@ -162,15 +171,15 @@ test_that("write_tsv() works with matrix", {
   write_tsv(m0, tf)
   expect_identical(readLines(tf, 1), first_row_plain)
   expect_equal(
-    fread(tf, sep = "\t", header = FALSE),
-    as.data.table(m0)
+    data.table::fread(tf, sep = "\t", header = FALSE),
+    data.table::as.data.table(m0)
   )
 
   write_tsv(m0, tf, col_names = TRUE)
   expect_identical(readLines(tf, 1), first_row_named)
   expect_equal(
-    fread(tf, sep = "\t", header = TRUE),
-    as.data.table(m0)
+    data.table::fread(tf, sep = "\t", header = TRUE),
+    data.table::as.data.table(m0)
   )
 
   write_tsv(m0, tf, col_names = TRUE, row_names = TRUE)
@@ -192,15 +201,15 @@ test_that("write_tsv() works with matrix", {
   write_tsv(m1, tf)
   expect_identical(readLines(tf, 1), first_row_named)
   expect_equal(
-    fread(tf, sep = "\t", header = TRUE),
-    as.data.table(m1, keep.rownames = FALSE)
+    data.table::fread(tf, sep = "\t", header = TRUE),
+    data.table::as.data.table(m1, keep.rownames = FALSE)
   )
 
   write_tsv(m1, tf, col_names = FALSE)
   expect_identical(readLines(tf, 1), first_row_plain)
   expect_equal(
-    fread(tf, sep = "\t", header = FALSE),
-    as.data.table(m0, keep.rownames = FALSE)
+    data.table::fread(tf, sep = "\t", header = FALSE),
+    data.table::as.data.table(m0, keep.rownames = FALSE)
   )
 
   # MATRIX WITH COLUM AND ROW NAMES
@@ -211,14 +220,14 @@ test_that("write_tsv() works with matrix", {
   write_tsv(m2, tf)
   expect_identical(readLines(tf, 1), paste0("rn\t", first_row_named))
   expect_equal(
-    fread(tf, sep = "\t", header = TRUE),
-    as.data.table(m2, keep.rownames = TRUE)
+    data.table::fread(tf, sep = "\t", header = TRUE),
+    data.table::as.data.table(m2, keep.rownames = TRUE)
   )
 
   write_tsv(m2, tf, row_names = FALSE)
   expect_identical(readLines(tf, 1), first_row_named)
   expect_equal(
-    fread(tf, sep = "\t", header = TRUE),
-    as.data.table(m2, keep.rownames = FALSE)
+    data.table::fread(tf, sep = "\t", header = TRUE),
+    data.table::as.data.table(m2, keep.rownames = FALSE)
   )
 })
